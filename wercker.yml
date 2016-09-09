@@ -17,6 +17,10 @@ build:
         packages: 
             - unzip
     - script:
+        name: php zip extension install
+        code: |-
+            docker-php-ext-install -j$(nproc) zip
+    - script:
         name: composer setup
         code: |-
             php composer.phar install --dev
