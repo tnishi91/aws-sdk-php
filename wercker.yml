@@ -17,6 +17,7 @@ build:
         packages: 
             - unzip
             - libzip-dev
+            - zlib1g-dev
     - script:
         name: php zip extension install
         code: |-
