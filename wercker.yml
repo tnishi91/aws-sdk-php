@@ -16,7 +16,7 @@ build:
     - script:
         name: composer setup
         code: |-
-            composer install --dev
+            php composer.phar install --dev
     - script:
         name: PHPUnit integration tests
         code: |-
