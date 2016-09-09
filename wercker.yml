@@ -17,11 +17,10 @@ build:
         packages: 
             - unzip
             - libzip-dev
-            - zlib1g-dev
     - script:
         name: php zip extension install
         code: |-
-            which zlib
+            docker-php-ext-configure zip --with-libzip=/usr/include/
             docker-php-ext-install -j$(nproc) zip
     - script:
         name: composer setup
