@@ -28,4 +28,4 @@ build:
     - script:
       name: PHPUnit integration tests
       code: |-
-        vendor/bin/phpunit tests
+        vendor/bin/phpunit tests/AwsClientTest
