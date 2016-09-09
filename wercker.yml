@@ -1,4 +1,4 @@
-box: php7.1
+box: php:7.1
 services:
   - wercker/mysql
 build:
