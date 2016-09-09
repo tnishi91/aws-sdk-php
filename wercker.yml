@@ -1,0 +1,45 @@
+box: wercker/php
+services:
+  - wercker/mysql
+build:
+  steps:
+    - script:
+        name: Activate PHP 5.3
+        code: phpenv global 5.3
+    - script:
+        name: install ansible
+        code: |-
+            git clone git://github.com/ansible/ansible.git
+            cd ansible
+            git checkout v1.7.1
+            sudo make install
+            type ansible || { echo "ansible not found"; exit 1; }
+    - script:
+        name: ansible provisioning
+        code: sudo ansible-playbook -i ci/wercker/wercker_hosts ci/wercker/wercker.yml -c local
+    - script:
+        name: setup test db
+        code: mysql -h$WERCKER_MYSQL_HOST -P$WERCKER_MYSQL_PORT -u$WERCKER_MYSQL_USERNAME -p$WERCKER_MYSQL_PASSWORD $WERCKER_MYSQL_DATABASE < ci/wercker/db.sql
+    - script:
+        name: fill mysql env.
+        code: |-
+            sudo sed -i -e "s/WERCKER_MYSQL_HOST/$WERCKER_MYSQL_HOST/g" $WERCKER_ROOT/test/UnitTest/phpunit.xml
+            sudo sed -i -e "s/WERCKER_MYSQL_PORT/$WERCKER_MYSQL_PORT/g" $WERCKER_ROOT/test/UnitTest/phpunit.xml
+            sudo sed -i -e "s/WERCKER_MYSQL_USERNAME/$WERCKER_MYSQL_USERNAME/g" $WERCKER_ROOT/test/UnitTest/phpunit.xml
+            sudo sed -i -e "s/WERCKER_MYSQL_PASSWORD/$WERCKER_MYSQL_PASSWORD/g" $WERCKER_ROOT/test/UnitTest/phpunit.xml
+            sudo sed -i -e "s/WERCKER_MYSQL_DATABASE/$WERCKER_MYSQL_DATABASE/g" $WERCKER_ROOT/test/UnitTest/phpunit.xml
+    - script:
+        name: echo PHP information
+        code: |-
+            php -v
+            php -i
+    - script:
+        name: PHPUnit integration tests
+        code: |-
+            cd test/UnitTest
+            phpunit -c phpunit.xml lib/
+  after-steps:
+    - sherzberg/slack-notify:
+        subdomain: my_slack_subdomain
+        token: $SLACK_TOKEN
+        channel: my_slack_channel
