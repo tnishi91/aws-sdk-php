@@ -6,14 +6,13 @@ build:
         code: |-
             php -v
             php -i
-    - install-packages:
-        packages: 
-            - unzip
-            - libzip-dev
+    - script:
+        name: Install dependency package
+        code: |-
+          apt-get update && apt-get install -y zlib1g-dev
     - script:
         name: php zip extension install
         code: |-
-            docker-php-ext-configure zip --with-zlib-dir=/usr/include/ --with-libzip=/usr/include/
             docker-php-ext-install -j$(nproc) zip
     - script:
         name: composer install
@@ -29,4 +28,5 @@ build:
     - script:
         name: PHPUnit integration tests
         code: |-
-            phpunit tests
+            vendor/bin/phpunit tests
+
