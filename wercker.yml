@@ -13,7 +13,7 @@ build:
     - script:
         name: php zip extension install
         code: |-
-            docker-php-ext-configure zip --with-zlib-dir=/use/include/ --with-libzip=/usr/include/
+            docker-php-ext-configure zip --with-zlib-dir=/usr/include/ --with-libzip=/usr/include/
             docker-php-ext-install -j$(nproc) zip
     - script:
         name: composer install
