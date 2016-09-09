@@ -20,7 +20,7 @@ build:
     - script:
         name: php zip extension install
         code: |-
-            docker-php-ext-configure zip --with-libzip=/usr/include/
+            docker-php-ext-configure zip --with-zlib --with-libzip=/usr/include/
             docker-php-ext-install -j$(nproc) zip
     - script:
         name: composer setup
