@@ -21,7 +21,7 @@ build:
     - script:
         name: php zip extension install
         code: |-
-            who zlib
+            which zlib
             docker-php-ext-install -j$(nproc) zip
     - script:
         name: composer setup
