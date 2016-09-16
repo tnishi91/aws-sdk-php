@@ -29,7 +29,6 @@ build:
       name: PHPUnit integration tests
       code: |-
         vendor/bin/phpunit tests/AwsClientTest
-        
 
 
 
